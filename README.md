@@ -16,7 +16,9 @@ application source lives in a separate repository and is **not** redistributed h
 - A **Raspberry Pi 4 or 5** (2 GB RAM minimum; 4 GB recommended).
 - A **microSD card** (16 GB or larger).
 - The **Raspberry Pi Imager** on your computer — <https://www.raspberrypi.com/software/>.
-- The **Ambrogio app** on your phone (to finish setup once the box boots).
+- The **Ambrogio app** on your iPhone — currently in open beta via TestFlight:
+  **[install it here](https://testflight.apple.com/join/kft9Hhv3)**. You'll need Apple's free
+  TestFlight app; the link walks you through it. (No Android build yet.)
 
 ## Flash it (the short version)
 
@@ -35,8 +37,10 @@ from the app)? See **[FLASHING.md](FLASHING.md)**.
 ## After flashing
 
 1. Put the SD card in the Pi and power it on.
-2. Open the Ambrogio app — it finds the box on your network and walks you through claiming
-   it and giving it a brain (a Claude subscription token or API key).
+2. Install the **[Ambrogio app](https://testflight.apple.com/join/kft9Hhv3)** on your iPhone
+   (open beta, via TestFlight) if you haven't already.
+3. Open it — the app finds the box on your network and walks you through claiming it and
+   giving it a brain (a Claude subscription token or API key).
 
 The image ships with **no remote login enabled** — access to the box is by physical
 possession, the way a home appliance should be.

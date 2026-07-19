@@ -10,7 +10,10 @@ You'll need:
 - A **Raspberry Pi 4 or 5** (2 GB RAM minimum, 4 GB recommended) and its power supply.
 - A **microSD card**, 16 GB or larger, and a way to connect it to your computer.
 - **Raspberry Pi Imager** installed — <https://www.raspberrypi.com/software/>.
-- The **Ambrogio app** on your phone, on the same Wi-Fi you'll use for the box.
+- The **Ambrogio app** on your iPhone, on the same Wi-Fi you'll use for the box. It is in open
+  beta: **[install it via TestFlight](https://testflight.apple.com/join/kft9Hhv3)** (Apple's
+  free TestFlight app handles the install; the link explains it). There is no Android build
+  yet — on Android you can still reach the box's web console in a browser after setup.
 
 ## Step 1 — Add the Ambrogio image to Raspberry Pi Imager
 
