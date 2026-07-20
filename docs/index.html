@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ambrogio — a household assistant that lives in your house</title>
+<meta name="description" content="A self-hosted assistant for your family, running on a Raspberry Pi you own. It reads your email, keeps your calendar, runs your devices — and everything it knows lives on your box, not in someone's cloud.">
+<meta property="og:title" content="Ambrogio">
+<meta property="og:description" content="A household assistant on a Raspberry Pi you own. No account to create; your data lives on your box, not in someone's cloud.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2324513B'/><circle cx='16' cy='13' r='4.6' fill='%23F0F4EF'/><path d='M7 27c1.6-5.2 5-7.8 9-7.8s7.4 2.6 9 7.8z' fill='%23A8823E'/></svg>">
+
+<!-- NO third-party requests anywhere on this page: no font CDN, no analytics, no embeds.
+     A landing page for an appliance whose whole promise is "your data stays in your house"
+     has no business phoning a font server on the reader's behalf. Everything below is
+     system fonts + inline CSS, so the page is also instant on a phone. -->
+<style>
+  :root{
+    /* The app's own palette (app/src/lib/theme.ts) — the butler's livery. Not re-invented here. */
+    --livrea:#24513B; --livrea-deep:#1A3B2B; --livrea-tint:#E8F0EA; --on-livrea:#F0F4EF;
+    --ottone:#A8823E; --ottone-tint:#F5EEDF;
+    --paper:#F7F8F5; --panel:#FFFFFF; --ink:#20261F; --muted:#68716A; --line:#DDE2DA;
+
+    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+    --measure: 62ch;
+    --pad: clamp(20px, 5vw, 40px);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--sans); font-size:17px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1040px; margin:0 auto; padding-inline:var(--pad)}
+  h1,h2,h3{font-family:var(--serif); font-weight:600; text-wrap:balance; margin:0}
+  p{margin:0}
+  a{color:inherit}
+
+  /* ---------- hero: the livery, worn ---------- */
+  .hero{
+    background:var(--livrea); color:var(--on-livrea);
+    /* A brass hairline at the bottom — the button on the uniform, not a gradient. */
+    border-bottom:3px solid var(--ottone);
+    padding-block: clamp(56px, 11vw, 104px) clamp(44px, 8vw, 76px);
+  }
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:clamp(28px,6vw,44px)}
+  .brand svg{width:34px; height:34px; display:block}
+  .brand b{font-family:var(--serif); font-size:20px; font-weight:600; letter-spacing:.01em}
+  .hero h1{
+    font-size:clamp(38px, 7.2vw, 68px); line-height:1.08; letter-spacing:-.015em;
+    max-width:17ch;
+  }
+  .pitch{
+    margin-top:22px; max-width:var(--measure);
+    font-size:clamp(17px, 2.3vw, 20.5px); line-height:1.55; color:#CFDDD2;
+  }
+  .pitch b{color:var(--on-livrea); font-weight:600}
+
+  /* ---------- the copy-paste command: the primary action ---------- */
+  .cmd{margin-top:clamp(30px,6vw,42px); max-width:760px}
+  .cmd-label{
+    font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ottone); font-weight:700; margin-bottom:9px;
+  }
+  .cmd-box{
+    display:flex; align-items:stretch; gap:0;
+    background:var(--livrea-deep); border:1px solid rgba(240,244,239,.16); border-radius:11px;
+    overflow:hidden;
+  }
+  .cmd-box code{
+    font-family:var(--mono); font-size:13.5px; line-height:1.5; color:#DCE7DF;
+    padding:15px 16px; overflow-x:auto; white-space:pre; flex:1; min-width:0;
+  }
+  .copy{
+    flex:none; border:0; border-left:1px solid rgba(240,244,239,.16);
+    background:transparent; color:var(--ottone);
+    font-family:var(--sans); font-size:13.5px; font-weight:700; letter-spacing:.02em;
+    padding-inline:18px; cursor:pointer; transition:background .15s, color .15s;
+  }
+  .copy:hover{background:rgba(168,130,62,.14)}
+  .copy[data-done="1"]{color:#9FD6B4}
+  .cmd-note{margin-top:11px; font-size:14.5px; color:#B8CCBF}
+  .cmd-note a{color:var(--ottone); text-decoration-thickness:1px; text-underline-offset:3px}
+
+  /* ---------- sections ---------- */
+  section{padding-block:clamp(52px, 9vw, 88px); border-bottom:1px solid var(--line)}
+  .eyebrow{
+    font-size:12px; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--ottone); font-weight:700; margin-bottom:12px;
+  }
+  section h2{font-size:clamp(26px,4vw,36px); line-height:1.18; letter-spacing:-.01em; max-width:20ch}
+  .lede{margin-top:14px; max-width:var(--measure); color:var(--muted); font-size:17.5px}
+
+  /* ---------- the four steps: numbered because it IS a sequence ---------- */
+  .steps{margin-top:clamp(30px,5vw,44px); display:grid; gap:14px}
+  @media (min-width:800px){ .steps{grid-template-columns:repeat(2,1fr); gap:16px} }
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:13px;
+    padding:22px 22px 20px; display:flex; gap:16px; align-items:flex-start;
+  }
+  .step .n{
+    flex:none; width:29px; height:29px; border-radius:50%;
+    background:var(--livrea-tint); color:var(--livrea);
+    font-family:var(--mono); font-size:13.5px; font-weight:700;
+    display:grid; place-items:center; margin-top:2px;
+  }
+  .step h3{font-size:18.5px; line-height:1.3}
+  .step p{margin-top:7px; font-size:15.5px; color:var(--muted); line-height:1.55}
+  .step code{
+    font-family:var(--mono); font-size:13px; background:var(--paper);
+    border:1px solid var(--line); border-radius:5px; padding:1px 5px; color:var(--ink);
+  }
+
+  /* ---------- the trust note: brass, because it is the one thing to read twice ---------- */
+  .note{
+    margin-top:clamp(28px,5vw,38px); background:var(--ottone-tint);
+    border:1px solid #E6D4B0; border-left:4px solid var(--ottone);
+    border-radius:11px; padding:20px 22px; max-width:var(--measure);
+  }
+  .note h3{font-size:17.5px; margin-bottom:7px}
+  .note p{font-size:15.5px; color:#5C4A28; line-height:1.55}
+
+  /* ---------- downloads ---------- */
+  .cards{margin-top:clamp(30px,5vw,42px); display:grid; gap:14px}
+  @media (min-width:760px){ .cards{grid-template-columns:repeat(2,1fr)} }
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:13px;
+    padding:24px; display:flex; flex-direction:column;
+  }
+  .card h3{font-size:19px}
+  .card p{margin-top:8px; font-size:15.5px; color:var(--muted); flex:1; line-height:1.55}
+  .card .meta{
+    margin-top:12px; font-family:var(--mono); font-size:12.5px; color:var(--muted);
+    word-break:break-all;
+  }
+  .btn{
+    display:inline-block; margin-top:18px; align-self:flex-start;
+    background:var(--livrea); color:var(--on-livrea); text-decoration:none;
+    font-weight:600; font-size:15.5px; padding:11px 20px; border-radius:9px;
+    transition:background .15s;
+  }
+  .btn:hover{background:var(--livrea-deep)}
+  .btn.ghost{background:transparent; color:var(--livrea); border:1.5px solid var(--livrea)}
+  .btn.ghost:hover{background:var(--livrea-tint)}
+
+  /* ---------- the app row ---------- */
+  .apps{margin-top:clamp(26px,4vw,36px); display:grid; gap:14px}
+  @media (min-width:760px){ .apps{grid-template-columns:repeat(2,1fr)} }
+  .app{
+    border:1px solid var(--line); border-radius:13px; padding:22px; background:var(--panel);
+    display:flex; flex-direction:column;
+  }
+  .app.soon{background:transparent; border-style:dashed}
+  .app .plat{font-family:var(--serif); font-size:18.5px; font-weight:600}
+  .app .state{
+    margin-top:6px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  }
+  .app .state.open{color:var(--livrea)}
+  .app .state.none{color:var(--muted)}
+  .app p{margin-top:10px; font-size:15px; color:var(--muted); flex:1; line-height:1.55}
+
+  footer{padding-block:44px 56px; color:var(--muted); font-size:15px}
+  footer .links{display:flex; flex-wrap:wrap; gap:10px 26px; margin-bottom:18px}
+  footer a{color:var(--livrea); font-weight:600; text-decoration-thickness:1px; text-underline-offset:3px}
+  footer .fine{max-width:var(--measure); line-height:1.55}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="7" fill="#1A3B2B"/>
+        <circle cx="16" cy="13" r="4.6" fill="#F0F4EF"/>
+        <path d="M7 27c1.6-5.2 5-7.8 9-7.8s7.4 2.6 9 7.8z" fill="#A8823E"/>
+      </svg>
+      <b>Ambrogio</b>
+    </div>
+
+    <h1>Hi, I'm Ambrogio.</h1>
+
+    <p class="pitch">
+      I'm a household assistant, and I live in your house — on a Raspberry Pi on your own
+      shelf. I read the family's email, keep the calendar, drive the lights, and remember
+      what matters. <b>Everything I know stays on that box</b>: no account to create, no
+      dashboard in someone else's data centre, no remote login left open. I think with
+      Claude, on your own subscription. You flash a card, plug it in, and say hello.
+    </p>
+
+    <div class="cmd">
+      <div class="cmd-label">Start here — add the image to Raspberry&nbsp;Pi&nbsp;Imager</div>
+      <div class="cmd-box">
+        <code id="cmd">rpi-imager --repo https://github.com/simonerom/Ambrogio-releases/releases/latest/download/ambrogio-repo.json</code>
+        <button class="copy" id="copy" type="button" aria-label="Copy the command">Copy</button>
+      </div>
+      <p class="cmd-note">
+        Opens the Imager with Ambrogio already in the list, always at the newest release.
+        Prefer to do it by hand? <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/FLASHING.md">Read the flashing guide</a>.
+      </p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Setting it up</div>
+    <h2>Four steps, about twenty minutes.</h2>
+    <p class="lede">
+      You'll need a Raspberry Pi 4 or 5, a microSD card, and a computer to write it with —
+      most of the twenty minutes is the card writing itself.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <div>
+          <h3>Write the card</h3>
+          <p>Run the command above, pick your SD card, and write. Fill in your Wi-Fi in the
+            Imager's settings while you're there — that's how the box gets online with no cable.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">2</div>
+        <div>
+          <h3>Inject your claim code — before you eject</h3>
+          <p>Run the little tool below against the card that's still in your computer. It writes a
+            one-off code onto the card and hands you a sheet to print. <b>Do this now</b>: a card
+            flashed without a code boots fine but refuses to be claimed by anyone.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">3</div>
+        <div>
+          <h3>Print the sheet, boot the Pi</h3>
+          <p>Stick the printed code on the underside of the box, the way a router wears its
+            password. Then put the card in, power it on, and give it a few minutes to settle.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n">4</div>
+        <div>
+          <h3>Claim it from the app</h3>
+          <p>The app finds the box on your network. Type the code from your sheet to prove the box
+            is in your hands, then give it a Claude subscription token so it can think.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <h3>Why a code at all?</h3>
+      <p>
+        A fresh box announces itself on your network, and the first person to claim it becomes its
+        owner — which means the family's email, an AI token, and an assistant that acts on your
+        behalf. The code proves you're the one physically holding the box. Ambrogio never invents
+        one for you: a code the box made up is a code nobody has. Lose the sheet and you re-inject
+        it with the card in your hand — which is exactly the point.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Downloads</div>
+    <h2>The image and the tool.</h2>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Appliance image</h3>
+        <p>Raspberry Pi OS Lite (arm64) with Ambrogio baked in. Ships with remote login switched
+          off — the box is set up entirely from the app.</p>
+        <div class="meta" id="rel-meta">Loading the latest release…</div>
+        <a class="btn" id="img-dl" href="https://github.com/simonerom/Ambrogio-releases/releases/latest">Download the image</a>
+      </div>
+
+      <div class="card">
+        <h3>Claim-code tool</h3>
+        <p>A small Python script. Point it at the freshly-written card: it injects the code and
+          writes a printable sheet with the code and the setup QR.</p>
+        <div class="meta">python3 · works on macOS and Linux</div>
+        <a class="btn ghost" id="tool-dl" href="https://github.com/simonerom/Ambrogio-releases/blob/main/tools/flash_box.py">Get the tool</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The app</div>
+    <h2>Set it up, then talk to it.</h2>
+    <p class="lede">
+      The app claims the box, walks you through setup, and is where you chat with Ambrogio
+      day to day. There's a web console on the box too, for anything with a keyboard.
+    </p>
+
+    <div class="apps">
+      <div class="app">
+        <div class="plat">iPhone</div>
+        <div class="state open">Open beta · TestFlight</div>
+        <p>Installed through TestFlight, Apple's beta channel — no invite needed, just the link.
+          You'll get Apple's free TestFlight app first if you don't have it.</p>
+        <a class="btn" href="https://testflight.apple.com/join/kft9Hhv3">Join the beta</a>
+      </div>
+
+      <div class="app soon">
+        <div class="plat">Android</div>
+        <div class="state none">Not yet</div>
+        <p>There's no Android build today, and we'd rather say so than show a button that doesn't
+          work. The box's web console works in any browser on the same network, so Android isn't
+          locked out of using Ambrogio — only out of the app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="https://github.com/simonerom/Ambrogio-releases">GitHub</a>
+      <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/FLASHING.md">Get started</a>
+      <a href="https://github.com/simonerom/Ambrogio-releases/releases">All releases</a>
+      <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/LICENSE.md">License</a>
+    </div>
+    <p class="fine">
+      Ambrogio is released under the PolyForm Noncommercial 1.0.0 licence — free for personal,
+      family, hobby, educational and charitable use. It needs your own Claude subscription to
+      think; you bring the account, the box does the rest.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // Copy-to-clipboard for the one command that matters.
+  (function () {
+    var btn = document.getElementById('copy'), cmd = document.getElementById('cmd');
+    if (!btn || !cmd || !navigator.clipboard) { if (btn) btn.hidden = true; return; }
+    btn.addEventListener('click', function () {
+      navigator.clipboard.writeText(cmd.textContent.trim()).then(function () {
+        btn.textContent = 'Copied'; btn.dataset.done = '1';
+        setTimeout(function () { btn.textContent = 'Copy'; btn.dataset.done = ''; }, 2000);
+      });
+    });
+  })();
+
+  // The image asset is VERSION-NAMED (ambrogio-0.1.12-alpha.img.xz), so no static URL can point
+  // at "the latest image". Ask the API for it and upgrade the button; if that call fails for any
+  // reason — offline, rate limit, API change — the button is already a working link to the
+  // releases page, so nothing here can leave a visitor stranded.
+  (function () {
+    var meta = document.getElementById('rel-meta'), dl = document.getElementById('img-dl');
+    if (!meta) return;
+    fetch('https://api.github.com/repos/simonerom/Ambrogio-releases/releases/latest')
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (rel) {
+        var img = (rel.assets || []).filter(function (a) { return /\.img\.xz$/.test(a.name); })[0];
+        if (!img) throw 0;
+        var mb = Math.round(img.size / 1048576);
+        meta.textContent = img.name + ' · ' + mb + ' MB · ' + (rel.tag_name || '');
+        dl.href = img.browser_download_url;
+      })
+      .catch(function () {
+        meta.textContent = 'Pick the newest .img.xz on the releases page';
+      });
+  })();
+</script>
+</body>
+</html>

@@ -4,9 +4,10 @@
 home. It reads your email, manages your calendar, drives smart-home devices, and talks
 to you from a phone app — all from a box you own, on your own network.
 
-This repository hosts the **flashable appliance images** and the flashing guide. The
-application source lives in a separate repository and is **not** redistributed here; see
-[LICENSE](LICENSE.md).
+This repository hosts the **flashable appliance images** and the flashing guide — there's
+also a **[landing page](https://simonerom.github.io/Ambrogio-releases/)** with the same
+links in a friendlier shape. The application source lives in a separate repository and is
+**not** redistributed here; see [LICENSE](LICENSE.md).
 
 > **Heads up — these images are for personal, non-commercial use.** Ambrogio is released
 > under the [PolyForm Noncommercial 1.0.0](LICENSE.md) license.
@@ -16,6 +17,8 @@ application source lives in a separate repository and is **not** redistributed h
 - A **Raspberry Pi 4 or 5** (2 GB RAM minimum; 4 GB recommended).
 - A **microSD card** (16 GB or larger).
 - The **Raspberry Pi Imager** on your computer — <https://www.raspberrypi.com/software/>.
+- **Python 3** on that computer, for the claim-code step below (macOS and Linux have it
+  already).
 - The **Ambrogio app** on your iPhone — currently in open beta via TestFlight:
   **[install it here](https://testflight.apple.com/join/kft9Hhv3)**. You'll need Apple's free
   TestFlight app; the link walks you through it. (No Android build yet.)
@@ -31,6 +34,18 @@ rpi-imager --repo https://github.com/simonerom/Ambrogio-releases/releases/latest
 That command opens the Imager with Ambrogio already listed. Choose it, pick your SD card,
 and write. The `latest` link always points at the newest release, so it never goes stale.
 
+Then, **with the freshly written card still in your computer**, put a claim code on it:
+download [`tools/flash_box.py`](tools/flash_box.py) from this repository and run
+
+```
+python3 flash_box.py
+```
+
+It generates a code, writes it onto the card, and saves a printable code sheet — print it
+and keep it. **Don't skip this step**: a box flashed without a code boots and joins your
+network, but can never be claimed — by you or by anyone else. The code is how you prove,
+at claim time, that the box in question is physically yours.
+
 Prefer to do it by hand, or want the full walkthrough (Wi-Fi, first boot, claiming the box
 from the app)? See **[FLASHING.md](FLASHING.md)**.
 
@@ -39,8 +54,9 @@ from the app)? See **[FLASHING.md](FLASHING.md)**.
 1. Put the SD card in the Pi and power it on.
 2. Install the **[Ambrogio app](https://testflight.apple.com/join/kft9Hhv3)** on your iPhone
    (open beta, via TestFlight) if you haven't already.
-3. Open it — the app finds the box on your network and walks you through claiming it and
-   giving it a brain (a Claude subscription token or API key).
+3. Open it — the app finds the box on your network, asks for the **claim code** from your
+   printed sheet, and walks you through giving the box a brain (a Claude subscription token
+   or API key).
 
 The image ships with **no remote login enabled** — access to the box is by physical
 possession, the way a home appliance should be.
