@@ -42,17 +42,19 @@ resolves to the newest release.
 1. In the Imager, select your Ambrogio image (from Step 1).
 2. Choose your **SD card** as the target. Double-check it's the right device — writing
    erases everything on it.
-3. When the Imager offers **OS customisation / advanced options**, you can pre-fill your
-   **Wi-Fi network name and password** here. This is the easiest way to get the box online
-   with no Ethernet cable — fill it in before writing.
+3. When the Imager offers **OS customisation / advanced options**, you can *optionally*
+   pre-fill your **Wi-Fi network name and password**. If you do, the box joins that network
+   by itself on first boot — the smoothest path. If you skip it, you'll get the box online
+   another way in Step 4 (an Ethernet cable, or the box's own setup Wi-Fi). Any of the three
+   works; you only need one.
 4. Write, and wait for the verify step to finish.
 5. **Leave the card in the reader.** Step 3 needs it. (The Imager ejects the card when it
    finishes — just unplug and re-insert it.)
 
 ## Step 3 — Put a claim code on the card
 
-**Do not skip this.** A box flashed without a claim code boots, joins your network, and
-announces itself — but **can never be claimed, by you or by anyone else.** See
+**Do not skip this.** A box flashed without a claim code boots and comes up on your network
+just fine — but **can never be claimed, by you or by anyone else.** See
 [Why the claim code](#why-the-claim-code) below.
 
 Download **[`flash_box.py`](tools/flash_box.py)** from this repository. Then, with the
@@ -111,21 +113,55 @@ without it you still get the code, which is the part that matters.
 
 </details>
 
-## Step 4 — First boot
+## Step 4 — First boot, and getting the box online
 
-1. Put the card in the Pi and connect power.
-2. The first boot takes a few minutes — the box sets itself up and joins your Wi-Fi.
-3. There is **no screen or keyboard needed**, and **no remote login** — the box is
-   designed to be set up entirely from the app.
+1. Put the card in the Pi and connect power. The first boot takes a few minutes while the
+   box sets itself up. No screen, no keyboard, and no remote login are needed — everything
+   is done from the app.
+2. Now the box needs to be on your network before the app can reach it. There are three ways
+   in — you only need one:
+   - **Ethernet (simplest).** Plug the Pi into your router with a network cable. It picks up
+     an address automatically and is on your network the moment it finishes booting. (This
+     works because home routers hand out addresses over the cable — no configuration needed.)
+   - **Wi-Fi you pre-filled in the Imager.** If you filled in your Wi-Fi back in Step 2, the
+     box joins it on this first boot. Nothing more to do here.
+   - **The box's own setup Wi-Fi.** If you did neither, the box raises its **own** temporary
+     network — the one named on your code sheet (e.g. `Ambrogio-9C41A7`). It's not on your
+     home network yet; you'll connect your phone to this setup network in Step 5 and hand
+     over your home Wi-Fi from the app.
 
-## Step 5 — Claim it from the app
+## Step 5 — Set up and claim it from the app
 
-1. Open the **Ambrogio app** on your phone (same Wi-Fi as the box).
-2. The app discovers the box on your network and asks you to **claim** it — this makes the
-   box yours. It will ask for the **claim code** from Step 3.
-3. Give the box a **brain**: paste a Claude **subscription token** (from `claude
+Open the **Ambrogio app** on your phone. What you do next depends on how the box got online
+in Step 4.
+
+### If the box is already on your network (Ethernet, or Wi-Fi pre-filled in the Imager)
+
+1. The app finds the box and offers to **claim** it — this makes the box yours. Type the
+   **claim code** from your code sheet (Step 3).
+2. Give the box a **brain**: paste a Claude **subscription token** (from `claude
    setup-token`) or an **Anthropic API key**. Ambrogio needs this to think.
-4. That's it — say hello in the app.
+3. That's it — say hello in the app.
+
+### If the box raised its own setup Wi-Fi (no cable, no pre-filled Wi-Fi)
+
+The box isn't on your network yet, so the app can't discover it until you've handed it your
+home Wi-Fi. The app walks you through exactly that:
+
+1. On the app's connect screen, tap **"New box not on Wi-Fi yet? Set up its Wi-Fi"**, then
+   **scan the QR on your code sheet**. That connects your phone to the box's `Ambrogio-…`
+   setup network (the claim code is its password). On iPhone, tap to join that network when
+   prompted — the QR fills the password for you.
+2. The app shows the Wi-Fi networks the box can see. Pick **your home Wi-Fi** and enter its
+   password. The box joins it and drops its setup network; your phone hops back to your home
+   Wi-Fi on its own.
+3. Now that the box is on your network, the app finds it and asks you to **claim** it — type
+   the **claim code** from your sheet.
+4. Give the box a **brain** (Claude subscription token or Anthropic API key), and say hello.
+
+> No Wi-Fi at all and no Ethernet? The box needs one of the two to reach the internet and
+> think. The setup Wi-Fi only connects your *phone* to the *box* — the box still joins your
+> home Wi-Fi (or Ethernet) for its actual network.
 
 ## Why the claim code
 
@@ -152,11 +188,11 @@ than asking you for a code that doesn't exist.
   even though it is already yours, **keeping all your data** — print the sheet this time and
   keep it. (A plain re-inject is refused on a claimed box, so a card left in the reader can't
   hijack it; the `--force-rekey` marker is what tells the box you did this on purpose.)
-- **The app doesn't find the box.** Give it a couple of minutes after first boot, and make
-  sure your phone is on the **same Wi-Fi** as the Pi. If you didn't pre-fill Wi-Fi in the
-  Imager, the box may have come up without a network — it then raises its own setup Wi-Fi
-  (the network name on your code sheet, with the claim code as its password), which the app
-  can join to configure Wi-Fi.
+- **The app doesn't find the box.** It only appears once it's on your network. If you used
+  Ethernet or pre-filled Wi-Fi, give it a couple of minutes after first boot and check your
+  phone is on the **same Wi-Fi** as the Pi. If you did neither, the box is waiting on its own
+  setup Wi-Fi — follow the second path in [Step 5](#step-5--set-up-and-claim-it-from-the-app)
+  (scan the QR on your code sheet) to hand it your home Wi-Fi first.
 - **Someone claimed my box and I don't have the code.** There is no on-box recovery — no
   button, no power-cycle trick. If you have the code sheet, use `--force-rekey` above. If you
   don't, the only way back in is to re-flash (Step 2), which wipes the box. This is deliberate:
