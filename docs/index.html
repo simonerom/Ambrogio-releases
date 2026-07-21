@@ -193,14 +193,17 @@
     </p>
 
     <div class="cmd">
-      <div class="cmd-label">Start here — add the image to Raspberry&nbsp;Pi&nbsp;Imager</div>
+      <div class="cmd-label">Start here — write a card (macOS &amp; Linux)</div>
       <div class="cmd-box">
-        <code id="cmd">rpi-imager --repo https://github.com/simonerom/Ambrogio-releases/releases/latest/download/ambrogio-repo.json</code>
-        <button class="copy" id="copy" type="button" aria-label="Copy the command">Copy</button>
+        <code id="cmd">curl -LO https://github.com/simonerom/Ambrogio-releases/raw/main/tools/flash_box.py
+sudo python3 flash_box.py --flash</code>
+        <button class="copy" id="copy" type="button" aria-label="Copy the commands">Copy</button>
       </div>
       <p class="cmd-note">
-        Opens the Imager with Ambrogio already in the list, always at the newest release.
-        Prefer to do it by hand? <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/FLASHING.md">Read the flashing guide</a>.
+        One little script downloads the latest image, flashes the card you pick, and writes your
+        claim code. On Windows, or if you'd rather use a graphical tool,
+        <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/FLASHING.md">the flashing guide</a>
+        has the Raspberry&nbsp;Pi&nbsp;Imager route too.
       </p>
     </div>
   </div>
@@ -219,29 +222,30 @@
       <div class="step">
         <div class="n">1</div>
         <div>
-          <h3>Write the card</h3>
-          <p>Run the command above, pick your SD card, and write. While you're there, you can
-            fill in your Wi-Fi in the Imager's settings — one easy way to get the box online
-            (an Ethernet cable is another, and there's a third if you skip both).</p>
+          <h3>Run the script</h3>
+          <p>The command above downloads the latest image, asks which removable disk is your SD
+            card, and — after warning you — flashes it. One step, no separate imager. (On Windows
+            or with a GUI, use Raspberry Pi Imager instead; the guide covers it.)</p>
         </div>
       </div>
 
       <div class="step">
         <div class="n">2</div>
         <div>
-          <h3>Inject your claim code — before you eject</h3>
-          <p>Run the little tool below against the card that's still in your computer. It writes a
-            one-off code onto the card and hands you a sheet to print. <b>Do this now</b>: a card
-            flashed without a code boots fine but refuses to be claimed by anyone.</p>
+          <h3>Print the code sheet</h3>
+          <p>The same run writes a one-off <b>claim code</b> onto the card and hands you a sheet to
+            print — the code, the box's Wi-Fi name, and a QR. It's your only copy, so print it and
+            keep it. The code is what proves the box is yours when you claim it.</p>
         </div>
       </div>
 
       <div class="step">
         <div class="n">3</div>
         <div>
-          <h3>Print the sheet, boot the Pi</h3>
-          <p>Stick the printed code on the underside of the box, the way a router wears its
-            password. Then put the card in, power it on, and give it a few minutes to settle.</p>
+          <h3>Boot the Pi, get it online</h3>
+          <p>Put the card in, power it on, give it a few minutes. Then get it on your network:
+            plug in an <b>Ethernet cable</b>, or let the app set up <b>Wi-Fi</b> for it (you'll scan
+            the QR from your sheet).</p>
         </div>
       </div>
 
@@ -249,10 +253,9 @@
         <div class="n">4</div>
         <div>
           <h3>Claim it from the app</h3>
-          <p>If the box is on your network — over Ethernet or the Wi-Fi you set in the Imager —
-            the app finds it. If not, the app sets up its Wi-Fi first: scan the QR on your sheet.
-            Then type your code to prove the box is yours, and give it a Claude subscription
-            token so it can think.</p>
+          <p>The app finds the box on your network and asks you to claim it. Type your code to prove
+            the box is yours, then give it a Claude subscription token so it can think — and say
+            hello.</p>
         </div>
       </div>
     </div>
@@ -277,19 +280,20 @@
 
     <div class="cards">
       <div class="card">
-        <h3>Appliance image</h3>
-        <p>Raspberry Pi OS Lite (arm64) with Ambrogio baked in. Ships with remote login switched
-          off — the box is set up entirely from the app.</p>
-        <div class="meta" id="rel-meta">Loading the latest release…</div>
-        <a class="btn" id="img-dl" href="https://github.com/simonerom/Ambrogio-releases/releases/latest">Download the image</a>
+        <h3>The flashing script</h3>
+        <p>A small, dependency-free Python script (macOS &amp; Linux). Run it with
+          <code>--flash</code> and it downloads the image, flashes the card you pick, and writes
+          your claim code — all in one. Or run it on a card you flashed yourself, to add the code.</p>
+        <div class="meta">python3 · self-contained · stdlib only</div>
+        <a class="btn" id="tool-dl" href="https://github.com/simonerom/Ambrogio-releases/blob/main/tools/flash_box.py">Get the script</a>
       </div>
 
       <div class="card">
-        <h3>Claim-code tool</h3>
-        <p>A small Python script. Point it at the freshly-written card: it injects the code and
-          writes a printable sheet with the code and the setup QR.</p>
-        <div class="meta">python3 · works on macOS and Linux</div>
-        <a class="btn ghost" id="tool-dl" href="https://github.com/simonerom/Ambrogio-releases/blob/main/tools/flash_box.py">Get the tool</a>
+        <h3>Appliance image</h3>
+        <p>Raspberry Pi OS Lite (arm64) with Ambrogio baked in, remote login switched off. The
+          script fetches this for you — download it by hand only for the Raspberry Pi Imager route.</p>
+        <div class="meta" id="rel-meta">Loading the latest release…</div>
+        <a class="btn ghost" id="img-dl" href="https://github.com/simonerom/Ambrogio-releases/releases/latest">Download the image</a>
       </div>
     </div>
   </div>
