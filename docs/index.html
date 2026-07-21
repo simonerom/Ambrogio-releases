@@ -123,6 +123,11 @@
   }
   .note h3{font-size:17.5px; margin-bottom:7px}
   .note p{font-size:15.5px; color:#5C4A28; line-height:1.55}
+  .note code{
+    font-family:var(--mono); font-size:13px; background:#FBF4E4;
+    border:1px solid #E6D4B0; border-radius:5px; padding:1px 5px; color:#5C4A28;
+    white-space:nowrap;
+  }
 
   /* ---------- downloads ---------- */
   .cards{margin-top:clamp(30px,5vw,42px); display:grid; gap:14px}
@@ -265,9 +270,10 @@ sudo python3 flash_box.py --flash</code>
       <p>
         A fresh box announces itself on your network, and the first person to claim it becomes its
         owner — which means the family's email, an AI token, and an assistant that acts on your
-        behalf. The code proves you're the one physically holding the box. Ambrogio never invents
-        one for you: a code the box made up is a code nobody has. Lose the sheet and you re-inject
-        it with the card in your hand — which is exactly the point.
+        behalf. The code proves you're the one physically holding the box, so it can't be taken by
+        whoever reaches it first. Lost the sheet? No need to start over: pull the card, write a
+        fresh code onto it with <code>python3 flash_box.py --force-rekey</code>, and pop it back —
+        your data stays put.
       </p>
     </div>
   </div>
@@ -284,14 +290,15 @@ sudo python3 flash_box.py --flash</code>
         <p>A small, dependency-free Python script (macOS &amp; Linux). Run it with
           <code>--flash</code> and it downloads the image, flashes the card you pick, and writes
           your claim code — all in one. Or run it on a card you flashed yourself, to add the code.</p>
-        <div class="meta">python3 · self-contained · stdlib only</div>
+        <div class="meta">python3 · nothing else to install</div>
         <a class="btn" id="tool-dl" href="https://github.com/simonerom/Ambrogio-releases/blob/main/tools/flash_box.py">Get the script</a>
       </div>
 
       <div class="card">
         <h3>Appliance image</h3>
-        <p>Raspberry Pi OS Lite (arm64) with Ambrogio baked in, remote login switched off. The
-          script fetches this for you — download it by hand only for the Raspberry Pi Imager route.</p>
+        <p>The ready-to-flash Ambrogio image, with no remote login — you set it up entirely from
+          the app. The script fetches it for you; download it by hand only for the Raspberry Pi
+          Imager route.</p>
         <div class="meta" id="rel-meta">Loading the latest release…</div>
         <a class="btn ghost" id="img-dl" href="https://github.com/simonerom/Ambrogio-releases/releases/latest">Download the image</a>
       </div>
