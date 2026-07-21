@@ -112,9 +112,8 @@ Treat it like a house key.
   a new code onto an owned box, **keeping its data**. (A plain re-inject is refused on a
   claimed box, so a stray card can't hijack it.)
 
-The script needs only stock Python 3 — no install, no dependencies. Installing the optional
-`qrcode` package (`pip3 install "qrcode[pil]"`) adds a QR image to the sheet; without it you
-still get the code, which is the part that matters.
+The script needs only stock Python 3 — no install, no dependencies. The code sheet's Wi-Fi QR
+is drawn by the script itself, so it's always there.
 
 </details>
 
