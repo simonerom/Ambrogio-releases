@@ -1763,10 +1763,18 @@ def main() -> int:
     # of boot"; nothing in the appliance counts power-cycles (`core.main physical-reset` is a CLI
     # verb needing a shell, which the public image does not give you). Printing a rescue that does
     # not exist is worse than printing none: it sends someone to stand over a box pulling the plug.
-    print("\n  If this card has booted before: the box picks the new code up on its next boot,\n"
-          "  but only while it is still UNCLAIMED. A box that already has an owner refuses to be\n"
-          "  re-keyed, and there is no gesture on the box that undoes that — re-flashing is the\n"
-          "  only way back in, and it wipes the box. Keep the printed sheet.")
+    if args.force_rekey:
+        # We JUST wrote a force-rekey marker — the box WILL adopt this code even though it's
+        # claimed, keeping its data. Printing the "a claimed box refuses re-keying" caveat here
+        # would flatly contradict what the user just did.
+        print("\n  This card carries a force-rekey marker, so the box adopts this code on its\n"
+              "  next boot even though it is already yours — your data is kept. Keep the printed\n"
+              "  sheet: it's the only copy of the new code.")
+    else:
+        print("\n  If this card has booted before: the box picks the new code up on its next boot,\n"
+              "  but only while it is still UNCLAIMED. A box that already has an owner refuses to\n"
+              "  be re-keyed by a plain code — to recover a box you own but lost the code for, re-run\n"
+              "  with --force-rekey (it keeps your data). Keep the printed sheet.")
     return 0
 
 

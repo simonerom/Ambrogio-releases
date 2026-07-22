@@ -187,11 +187,17 @@ home Wi-Fi. The app walks you through exactly that:
   network** as the Pi. Otherwise the box is waiting on its own setup Wi-Fi — follow the
   second path in [Set up and claim](#set-up-and-claim-it-from-the-app) (scan your sheet's
   QR) to hand it your home Wi-Fi first.
-- **Someone claimed my box and I don't have the code.** There's no on-box recovery — no
-  button, no power-cycle trick. If you have the code sheet, use `--force-rekey` (see the
-  script options). If you don't, the only way back in is to re-flash, which wipes the box.
-  This is deliberate: the code is the only thing between your household data and anyone who
-  reaches the box.
+- **I've lost the claim code.** There's no on-box override — no button, no power-cycle trick —
+  but which recovery you use depends on who owns the box:
+  - **It's your box** (you claimed it), you just lost the printed sheet: pull the card, run
+    `python3 flash_box.py --force-rekey` on it, put it back and reboot. It writes a **fresh**
+    code and **keeps all your data** (a plain re-inject is refused on a claimed box, so a stray
+    card can't hijack it; the `--force-rekey` marker is you saying you meant it). Print the new
+    sheet.
+  - **Someone else claimed it before you** and you can't get in: the only way to take it back is
+    to re-flash (Option 1 or 2), which **wipes** the box, then claim it yourself. That's
+    deliberate — physical possession of the card is the one thing that beats a first-claim, so
+    keep your box on a network you control.
 - **You want to start over.** Write the card again (Option 1 or 2).
 
 ## Verifying a download (optional)

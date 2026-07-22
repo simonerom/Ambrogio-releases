@@ -10,10 +10,11 @@
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%2324513B'/><circle cx='16' cy='13' r='4.6' fill='%23F0F4EF'/><path d='M7 27c1.6-5.2 5-7.8 9-7.8s7.4 2.6 9 7.8z' fill='%23A8823E'/></svg>">
 
-<!-- NO third-party requests anywhere on this page: no font CDN, no analytics, no embeds.
-     A landing page for an appliance whose whole promise is "your data stays in your house"
-     has no business phoning a font server on the reader's behalf. Everything below is
-     system fonts + inline CSS, so the page is also instant on a phone. -->
+<!-- No fonts CDN, no analytics, no trackers, no embeds — an appliance whose whole promise is
+     "your data stays in your house" has no business phoning a font server on the reader's
+     behalf. System fonts + inline CSS, so the page is also instant on a phone. The ONE network
+     call is an optional fetch to api.github.com to show the current image's size (below); it's
+     GitHub's own release API, degrades gracefully if it's rate-limited, and sends nothing. -->
 <style>
   :root{
     /* The app's own palette (app/src/lib/theme.ts) — the butler's livery. Not re-invented here. */
