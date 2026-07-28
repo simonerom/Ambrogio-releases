@@ -1,13 +1,16 @@
 # Ambrogio — release images
 
+### 👉 [**Start here — the Ambrogio landing page**](https://simonerom.github.io/Ambrogio-releases/)
+
+*What it is, what you need, and how to get it running — in a friendlier shape than this page.*
+
 **Ambrogio** is a self-hosted household assistant that runs on a Raspberry Pi in your
 home. It reads your email, manages your calendar, drives smart-home devices, and talks
 to you from a phone app — all from a box you own, on your own network.
 
-This repository hosts the **flashable appliance images** and the flashing guide — there's
-also a **[landing page](https://simonerom.github.io/Ambrogio-releases/)** with the same
-links in a friendlier shape. The application source lives in a separate repository and is
-**not** redistributed here; see [LICENSE](LICENSE.md).
+This repository hosts the **flashable appliance images** and the flashing guide. The
+application source lives in a separate repository and is **not** redistributed here; see
+[LICENSE](LICENSE.md).
 
 > **Heads up — these images are for personal, non-commercial use.** Ambrogio is released
 > under the [PolyForm Noncommercial 1.0.0](LICENSE.md) license.

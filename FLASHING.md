@@ -1,7 +1,8 @@
 # Flashing Ambrogio onto a Raspberry Pi
 
 This guide takes you from a blank SD card to a running Ambrogio box you've claimed from
-the app. Budget about 15–20 minutes, most of it the card writing itself.
+the app. It asks about a minute of your attention; the card then writes itself in roughly
+ten minutes while you do something else.
 
 Every box needs a **claim code** written onto its card before first boot — it's the one
 proof that *you* are the person holding the box, and without it the box can never be
