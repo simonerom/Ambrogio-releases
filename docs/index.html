@@ -206,8 +206,8 @@ sudo python3 flash_box.py --flash</code>
         <button class="copy" id="copy" type="button" aria-label="Copy the commands">Copy</button>
       </div>
       <p class="cmd-note">
-        One little script downloads the latest image, flashes the card you pick, and writes your
-        claim code. On Windows, or if you'd rather use a graphical tool,
+        One command downloads the latest image, flashes the card you pick, and writes your
+      claim code. On Windows, or if you'd rather use a graphical tool,
         <a href="https://github.com/simonerom/Ambrogio-releases/blob/main/FLASHING.md">the flashing guide</a>
         has the Raspberry&nbsp;Pi&nbsp;Imager route too.
       </p>
@@ -221,8 +221,7 @@ sudo python3 flash_box.py --flash</code>
     <h2>Four steps, about a minute of your time.</h2>
     <p class="lede">
       You'll need a Raspberry Pi 4 or 5, a microSD card, and a computer to write it with.
-      Writing the card takes roughly ten minutes — but that part runs by itself, so you're
-      only actually doing something for a minute or so.
+      Writing the card takes about ten minutes and runs unattended — your part is about a minute.
     </p>
 
     <div class="steps">
@@ -231,8 +230,8 @@ sudo python3 flash_box.py --flash</code>
         <div>
           <h3>Run the script</h3>
           <p>The command above downloads the latest image, asks which removable disk is your SD
-            card, and — after warning you — flashes it. One step, no separate imager. (On Windows
-            or with a GUI, use Raspberry Pi Imager instead; the guide covers it.)</p>
+            card, and flashes it after a confirmation. No separate imager needed. (On Windows, or
+            if you prefer a GUI, use Raspberry Pi Imager — the guide covers it.)</p>
         </div>
       </div>
 
@@ -270,11 +269,11 @@ sudo python3 flash_box.py --flash</code>
     <div class="note">
       <h3>Why a code at all?</h3>
       <p>
-        A fresh box announces itself on your network, and the first person to claim it becomes its
-        owner — which means the family's email, an AI token, and an assistant that acts on your
-        behalf. The code proves you're the one physically holding the box, so it can't be taken by
-        whoever reaches it first. Lost the sheet? No need to start over: pull the card, write a
-        fresh code onto it with <code>python3 flash_box.py --force-rekey</code>, and pop it back —
+        A fresh box announces itself on your network, and whoever claims it first becomes its
+      owner — with access to the family's email, a Claude token, and an assistant that acts on
+      their behalf. The code proves you're the person physically holding the box, so ownership
+      can't go to whoever reaches it first on the network. Lost the sheet? Pull the card, write a
+      fresh code onto it with <code>python3 flash_box.py --force-rekey</code>, and put it back —
         your data stays put.
       </p>
     </div>
@@ -313,25 +312,25 @@ sudo python3 flash_box.py --flash</code>
     <div class="eyebrow">The app</div>
     <h2>Set it up, then talk to it.</h2>
     <p class="lede">
-      The app claims the box, walks you through setup, and is where you chat with Ambrogio
-      day to day. There's a web console on the box too, for anything with a keyboard.
+      The app claims the box, walks you through setup, and is where you talk to Ambrogio
+      day to day. There's also a web console on the box, reachable from any browser on your
+      network.
     </p>
 
     <div class="apps">
       <div class="app">
         <div class="plat">iPhone</div>
         <div class="state open">Open beta · TestFlight</div>
-        <p>Installed through TestFlight, Apple's beta channel — no invite needed, just the link.
-          You'll get Apple's free TestFlight app first if you don't have it.</p>
+        <p>Distributed through TestFlight, Apple's free beta channel — no invite needed, just
+          the link.</p>
         <a class="btn" href="https://testflight.apple.com/join/kft9Hhv3">Join the beta</a>
       </div>
 
       <div class="app soon">
         <div class="plat">Android</div>
         <div class="state none">Not yet</div>
-        <p>There's no Android build today, and we'd rather say so than show a button that doesn't
-          work. The box's web console works in any browser on the same network, so Android isn't
-          locked out of using Ambrogio — only out of the app.</p>
+        <p>No Android app yet. Android phones can still use Ambrogio through the box's web
+          console, from any browser on the same network.</p>
       </div>
     </div>
   </div>
@@ -347,8 +346,7 @@ sudo python3 flash_box.py --flash</code>
     </div>
     <p class="fine">
       Ambrogio is released under the PolyForm Noncommercial 1.0.0 licence — free for personal,
-      family, hobby, educational and charitable use. It needs your own Claude subscription to
-      think; you bring the account, the box does the rest.
+      family, hobby, educational and charitable use. It needs your own Claude subscription to think.
     </p>
   </div>
 </footer>
